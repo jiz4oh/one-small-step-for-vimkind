@@ -182,6 +182,7 @@ Capabilities:
 * [x] supportsExceptionInfoRequest 
 * [ ] supportsExceptionOptions
 * [x] supportsConfigurationDoneRequest
+* [x] supportsLogPoints
 
 ## Name
 

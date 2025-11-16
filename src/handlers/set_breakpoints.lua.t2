@@ -17,6 +17,7 @@ for _, bp in ipairs(args.breakpoints) do
   breakpoints[bp.line] = breakpoints[bp.line] or {}
   local line_bps = breakpoints[bp.line]
 	; save breakpoint
+  ; save breakpoint log message if any
   table.insert(results_bps, { verified = true })
   -- log("Set breakpoint at line " .. bp.line .. " in " .. args.source.path)
 end
@@ -45,7 +46,6 @@ end
 ;; support capabilities
 supportsHitConditionalBreakpoints = true,
 supportsConditionalBreakpoints = true,
-
 
 ;; save breakpoint
 if bp.condition and bp.hitCondition then

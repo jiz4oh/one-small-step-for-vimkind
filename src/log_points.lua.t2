@@ -1,0 +1,47 @@
+;;; lua-debug
+;; support capabilities
+supportsLogPoints = true,
+
+;; attach variables
+local breakpoints_logmsg = {}
+
+;; save breakpoint log message if any
+if bp.logMessage then
+  breakpoints_logmsg[bp.line] = breakpoints_logmsg[bp.line] or {}
+  breakpoints_logmsg[bp.line][vim.uri_from_fname(args.source.path:lower())] = bp.logMessage
+end
+
+;; if breakpoint has log message
+if breakpoints_logmsg[line] and breakpoints_logmsg[line][path] then
+  local logmsg = breakpoints_logmsg[line][path]
+  ; interpolate log message
+  local event = make_event('output')
+  event.body = { category = 'console', output = logmsg .. "\n" }
+  sendProxyDAP(event)
+
+;; interpolate log message
+local i = 1
+local head = ""
+local tail = logmsg
+while #tail > 0 do
+  local start, stop = string.find(tail, "{[^{]*}")
+  if start and stop then
+    local expr = tail:sub(start+1,stop-1)
+    local result
+    ; evaluate expression for interpolation
+    head = head .. tail:sub(1,start-1) .. (result_repl or "")
+    tail = tail:sub(stop+1)
+  else
+    head = head .. tail
+    tail = ""
+  end
+end
+logmsg = head
+
+;; evaluate expression for interpolation
+local frame = 2
+; retrieve locals in frame
+; retrieve upvalues in frame
+; retrieve globals
+; set frame environment for execution
+; evaluate expression

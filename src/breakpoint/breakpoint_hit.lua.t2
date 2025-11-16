@@ -44,8 +44,11 @@ if source_path:sub(1, 1) == "@" then
 
 			if hit then
 				log("breakpoint hit")
-				; send stopped event breakpoint
-				; freeze neovim instance
+				; if breakpoint has log message
+				else
+					; send stopped event breakpoint
+					; freeze neovim instance
+				end
 			end
     end
   end
